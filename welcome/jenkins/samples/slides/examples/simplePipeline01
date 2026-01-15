@@ -12,7 +12,7 @@ pipeline {
         stage('Clone Flask Project') {
             steps {
                 // Use the Git plugin to clone the repository
-                git branch: 'jenkins-workshop', url: 'https://github.com/yanivomc/devopshift-welcome.git'
+                git branch: 'jenkins-workshop', url: 'https://github.com/yhayat1/devopshift-welcome.git'
             }
         }
 
@@ -85,6 +85,19 @@ pipeline {
                 }
             }
         }
+
+        stage('Wait for User Approval') {
+            steps {
+                script {
+                    // Wait for user interaction and store the result
+                    def userInput = input message: 'Do you approve the deployment?',
+                                         parameters: [choice(name: 'Proceed', choices: 'Approve\nReject', description: 'Choose an option')]
+                    // Set a variable based on user input
+                    env.USER_CHOICE = userInput
+                }
+            }
+        }
+
     }
 
     post {

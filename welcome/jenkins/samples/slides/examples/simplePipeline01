@@ -91,9 +91,34 @@ pipeline {
                 script {
                     // Wait for user interaction and store the result
                     def userInput = input message: 'Do you approve the deployment?',
-                                         parameters: [choice(name: 'Proceed', choices: 'Approve\nReject', description: 'Choose an option')]
+                                         parameters: [choice(name: 'Deployment manual approval', choices: 'Approve\nReject', description: 'Choose an option')]
                     // Set a variable based on user input
                     env.USER_CHOICE = userInput
+                }
+            }
+        }
+
+        stage('Continue the pipeline') {
+            // Run this stage ONLY! if the user chooses 'Approve'
+
+            when {
+                expression { env.USER_CHOICE == 'Approve' }
+            }
+            steps {
+                script {
+                    echo 'Continuing the pipeline...'
+                }
+            }
+        }
+
+        stage('Abort the Pipeline') {
+            // Run this stage ONLY! if the user chooses 'Reject'
+            when {
+                expression { env.USER_CHOICE == 'Reject' }
+            }
+            steps {
+                script {
+                    error 'Pipeline aborted by the user'
                 }
             }
         }

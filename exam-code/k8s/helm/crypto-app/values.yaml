@@ -1,0 +1,22 @@
+# Replica counts
+frontend:
+  replicaCount: 2
+  image: yossihayat/docker-web:1.0.0
+  port: 5002
+
+backend:
+  replicaCount: 2
+  image: yossihayat/docker-backend-service:1.0.0
+  port: 5001
+
+mysql:
+  replicaCount: 1
+  image: mysql:8.0
+  port: 3306
+
+# Database credentials (backend connects to MySQL; MySQL root and DB)
+mysqlHost: mysql-service
+mysqlUser: root
+mysqlPassword: "123456"
+mysqlRootPassword: "123456"
+mysqlDatabase: crypto_db
